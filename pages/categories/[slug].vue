@@ -8,8 +8,10 @@ const { data: categories, error: categories_error } = await useWPAPI().getCatego
 const category = categories.value[0];
 
 console.log(category)
+console.log(categories_error)
 
 const { data: posts, error: posts_error } = await useWPAPI().getPosts(category.id)
+console.log(posts_error)
 
 useHead({
     title: category?.name,
@@ -30,8 +32,9 @@ useHead({
 <template>
     <div class="p-6 mx-auto max-w-7xl lg:px-8">
         <div class="my-6">
-            <div v-if="categories_error || posts_error">
-                <p>No posts found</p>
+            <div v-if="posts?.length==0" class="text-center py-10">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">No Posts Found</h2>
+                <p class="text-gray-600">Sorry, we couldn't find any posts in this category.</p>
             </div>
             <div v-else class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
                 <BlogGrid v-for="post in posts" :key="post.id" :title="post.title.rendered"
